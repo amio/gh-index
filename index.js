@@ -37,10 +37,20 @@ $(function () {
          * Init gh-index
          */
         init: function () {
-            $.ajax({
-                url: this.url,
-                success: this.onload
-            });
+
+            var cachedData = localStorage && localStorage.getItem(owner + '/' + repo);
+            var treeData = cachedData && JSON.parse(cachedData);
+
+            // Only fetch new data every 60 sec
+            // to avoid github api restriction.
+            if (treeData && (Date.now() - treeData.timestamp < 60000)) {
+                this.onload(JSON.parse(cachedData));
+            } else {
+                $.ajax({
+                    url: this.url,
+                    success: this.onload
+                });
+            }
 
             $(window).on('hashchange', this.hashRoute);
         },
@@ -52,6 +62,10 @@ $(function () {
         onload: function (resp) {
             // build tree
             index.tree = index.genTree(resp['tree']);
+
+            // cache request data
+            resp.timestamp = Date.now();
+            localStorage && localStorage.setItem(owner + '/' + repo, JSON.stringify(resp));
 
             // build html
             index.hashRoute();
