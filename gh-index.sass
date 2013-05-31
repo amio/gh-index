@@ -9,9 +9,11 @@ $treeHoverBg:#FFFEE3
 $blobLinkColor:#1A8BED
 $blobHoverBg:#F2F8FD
 
+$listSpliter:#EFEFEF
+
 #gh-index
     font: 14px/1.6em Menlo, monospace
-    max-width: 500px
+    max-width: $maxWidth
     margin: 0 auto
 
     a
@@ -21,11 +23,11 @@ $blobHoverBg:#F2F8FD
         padding: .2em .3em
         line-height: 3em
 
-    span
-        position: relative
-        top: -3px
-        color: $baseFontColor
-        font-size: 14px
+        span
+            position: relative
+            top: -3px
+            color: $baseFontColor
+            font-size: 14px
 
     .uplink
         font-size: 18px
@@ -35,17 +37,17 @@ $blobHoverBg:#F2F8FD
         span
             padding-left: 5px
 
-        :hover span
+        &:hover span
             padding-left: 9px
 
     ul
         list-style: none
         padding: 0
         margin: 0
-        border-bottom: 1px solid #EFEFEF
+        border-bottom: 1px solid $listSpliter
 
     li
-        border-top: 1px solid #EFEFEF
+        border-top: 1px solid $listSpliter
 
         a
             padding-left: .3em
