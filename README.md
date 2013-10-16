@@ -1,5 +1,4 @@
-# The `index.html` for your gh-pages
----
+# The "index.html" for your gh-pages
 
 ## 2 steps how-to:
 
