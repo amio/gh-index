@@ -1,4 +1,4 @@
-# The "index.html" for your gh-pages
+# A directory index for your gh-pages
 
 ## Two steps how-to:
 
