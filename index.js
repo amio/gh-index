@@ -12,15 +12,20 @@ $(function () {
     };
 
     // Get "owner" and "repo" info
-    var loc = window.location,
-        repoinfo = document.body.getAttribute('data-repoinfo');
-    var owner = repoinfo ? repoinfo.split('/')[0] : loc.hostname.replace(/(\w+)\.\S+/, '$1'),
-        repo = repoinfo ? repoinfo.split('/')[1] :
-            loc.pathname === '/' ? loc.hostname : loc.pathname.replace(/^\/([^/]+)\S+/, '$1');
+    var wrapper = document.getElementById('gh-index');
+    var repoconfig = wrapper.getAttribute('data-repo'),
+        owner, repo, branch = 'gh-pages';
+    if (repoconfig) {
+        owner = repoconfig.split('/')[0];
+        repo = repoconfig.split('/')[1];
+    } else {
+        owner = window.location.hostname.replace(/(\w+)\.\S+/, '$1');
+        repo = window.location.pathname.replace(/^\/([^/]+)\S+/, '$1');
+    }
 
-    // Prepare the Github API and the Wrapper Element
-    var apiSchema = 'https://api.github.com/repos/OWNER/REPO/git/trees/HEAD?recursive=1',
-        wrapper = document.getElementById('gh-index');
+    // Prepare the Github API
+    var apiSchema = 'https://api.github.com/repos/{$OWNER}/{$REPO}'
+                  + '/git/trees/{$BRANCH}?recursive=1';
 
     /**
      * Global gh-index object
@@ -28,7 +33,11 @@ $(function () {
     var index = {
 
         // api url
-        url: apiSchema.replace('OWNER', owner).replace('REPO', repo),
+        url: apiSchema.replaceWith({
+            'OWNER': owner,
+            'REPO': repo,
+            'BRANCH': branch
+        }),
 
         // RegExp for files to exclude
         excludes: new RegExp(document.body.getAttribute('data-excludes')),
