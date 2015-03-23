@@ -38,7 +38,7 @@ $(function () {
          */
         init: function () {
 
-            var cachedData = localStorage && localStorage.getItem(owner + '/' + repo);
+            var cachedData = sessionStorage && sessionStorage.getItem(owner + '/' + repo);
             var treeData = cachedData && JSON.parse(cachedData);
 
             // Only fetch new data every 60 sec
@@ -65,7 +65,7 @@ $(function () {
 
             // cache request data
             resp.timestamp = Date.now();
-            localStorage && localStorage.setItem(owner + '/' + repo, JSON.stringify(resp));
+            sessionStorage && sessionStorage.setItem(owner + '/' + repo, JSON.stringify(resp));
 
             // build html
             index.hashRoute();
