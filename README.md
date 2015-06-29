@@ -7,7 +7,7 @@
 
 ## Demo
 
-* [amio/gh-index](https://github.com/amio/gh-index)
+* [amio/gh-index](https://amio.github.io/gh-index)
 * [yeoman/yeoman.io](http://amio.github.io/gh-index/demo/)
 
 ## Further configuration
