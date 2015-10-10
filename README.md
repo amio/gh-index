@@ -16,7 +16,7 @@ Add these attributes to `<div id="gh-index" />` in your [index.html](https://git
 
 * `data-excludes` *{RegExp}*  
   If there's something you want to hide.
-* `data-repoinfo` *{String}*  
+* `data-repo` *{String}*  
   Specify another repo, such as 'yeoman/yeoman.io'.
 
 for example:
