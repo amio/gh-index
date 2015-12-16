@@ -8,7 +8,20 @@
 ## Demo
 
 * [amio/gh-index](https://amio.github.io/gh-index)
-* [yeoman/yeoman.io](http://amio.github.io/gh-index/demo/)
+```html
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>gh-index</title>
+	<link rel="stylesheet" href="http://amio.github.io/gh-index/index.css" />
+	<script type="text/javascript" src="http://zeptojs.com/zepto.min.js"></script>
+	<script type="text/javascript" src="http://amio.github.io/gh-index/index.js"></script>
+</head>
+<body>
+	<div id="gh-index" data-repo="amio/gh-index" data-excludes="\.gitignore"></div>
+</body>
+</html>
+```
 
 ## Configuration
 
