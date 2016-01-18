@@ -11,6 +11,29 @@ $(function () {
         });
     };
 
+    var raf = (function(){
+      return  window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+              }
+    })()
+
+    function insertStylesheet (url) {
+      var link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.type = 'text/css'
+      link.href = url
+      document.head.appendChild(link)
+    }
+
+    function insertStylesheetAsync (url) {
+      raf(function(){
+        insertStylesheet(url)
+      })
+    }
+
     // Get "owner" and "repo" info
     var wrapper = document.getElementById('gh-index');
     var repoconfig = wrapper.getAttribute('data-repo'),
@@ -146,7 +169,8 @@ $(function () {
             }
 
             // generate list html
-            var tmpl = '<li class="{$type}"><a href="{$link}">{$name}</a></li>',
+            var tmpl = '<li class="{$type}">'
+                        + '<a href="{$link}"><span class="{$icon}"></span> {$name}</a></li>',
                 list = '<ul>',
                 home = 'http://' + owner + '.github.io/' + repo + '/',
                 node;
@@ -157,7 +181,8 @@ $(function () {
                     list += tmpl.replaceWith({
                         type: node.type,
                         link: node.type === 'blob' ? (home + node.path) : '#' + node.path + '/',
-                        name: node.path + (node.type === 'tree' ? '/' : '')
+                        name: node.path + (node.type === 'tree' ? '/' : ''),
+                        icon: 'octicon octicon-file-' + (node.type === 'tree' ? 'directory' : 'text')
                     });
                 }
             }
@@ -176,5 +201,9 @@ $(function () {
     window.index = index;
 
     // Init
+    insertStylesheet('http://amio.github.io/gh-index/index.css')
+    insertStylesheetAsync(
+      'https://octicons.github.com/components/octicons/octicons/octicons.css'
+    )
     index.init();
 });
