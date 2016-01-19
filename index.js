@@ -29,16 +29,21 @@ window.addEventListener('DOMContentLoaded', function () {
   }
 
   function getRepoInfo() {
-    var repoconfig = (wrapper.getAttribute('data-repo') || wrapper.getAttribute('repo') || '').split('/');
+    var config = wrapper.getAttribute('repo') || wrapper.getAttribute('data-repo');
+    if (!config) return null;
+
+    var repoInfo = config.split('/');
     return {
-      owner: repoconfig[0],
-      name: repoconfig[1],
+      owner: repoInfo[0],
+      name: repoInfo[1],
       branch: 'gh-pages'
     };
   }
 
   function loadTrees() {
     var repo = getRepoInfo();
+    if (!repo) return window.alert('Repo config missing!');
+
     var cachedData = window.sessionStorage.getItem(repo.owner + '/' + repo.name);
     var treeData = cachedData && JSON.parse(cachedData);
 
@@ -66,7 +71,7 @@ window.addEventListener('DOMContentLoaded', function () {
   var index = {
 
     // RegExp for files to exclude
-    excludes: new RegExp(document.body.getAttribute('data-excludes')),
+    excludes: new RegExp(wrapper.getAttribute('excludes')),
 
     /**
      * Init gh-index
@@ -74,6 +79,7 @@ window.addEventListener('DOMContentLoaded', function () {
     init: function init() {
       window.addEventListener('hashchange', index.hashRoute);
       insertStylesheet('http://amio.github.io/gh-index/index.css');
+      // insertStylesheet('index.css')
       insertStylesheetAsync('https://octicons.github.com/components/octicons/octicons/octicons.css');
 
       loadTrees();
