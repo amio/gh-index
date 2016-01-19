@@ -53,9 +53,9 @@ window.addEventListener('DOMContentLoaded', () => {
         .then(resp => resp.json())
         .then(result => {
           // cache request data
-          console.log(result.tree)
+          // console.log(result.tree)
           result.tree.timestamp = Date.now()
-          // sessionStorage.setItem(
+          // window.sessionStorage.setItem(
           //   repo.owner + '/' + repo.name,
           //   JSON.stringify(result.tree)
           // )
@@ -166,14 +166,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
         let node = tree[key]['/NODE/']
         let str = ''
-        console.log(node.type)
         switch (node.type) {
           case 'blob':
             str = `<li class="blob"><a href="${home + node.path}">` +
               `<span class="octicon octicon-file-text"></span> ${node.path}</a></li>`
             break
           case 'tree':
-            str = `<li class="blob"><a href="#${node.path}/">` +
+            str = `<li class="tree"><a href="#${node.path}/">` +
               `<span class="octicon octicon-file-directory"></span> ${node.path}/</a></li>`
             break
         }
