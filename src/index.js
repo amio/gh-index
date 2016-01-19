@@ -30,16 +30,21 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function getRepoInfo () {
-    const repoconfig = (wrapper.getAttribute('data-repo') || wrapper.getAttribute('repo') || '').split('/')
+    const config = wrapper.getAttribute('repo') || wrapper.getAttribute('data-repo')
+    if (!config) return null
+
+    const repoInfo = config.split('/')
     return {
-      owner: repoconfig[0],
-      name: repoconfig[1],
+      owner: repoInfo[0],
+      name: repoInfo[1],
       branch: 'gh-pages'
     }
   }
 
   function loadTrees () {
     const repo = getRepoInfo()
+    if (!repo) return window.alert('Repo config missing!')
+
     const cachedData = window.sessionStorage.getItem(repo.owner + '/' + repo.name)
     const treeData = cachedData && JSON.parse(cachedData)
 
@@ -68,7 +73,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const index = {
 
     // RegExp for files to exclude
-    excludes: new RegExp(document.body.getAttribute('data-excludes')),
+    excludes: new RegExp(wrapper.getAttribute('excludes')),
 
     /**
      * Init gh-index
