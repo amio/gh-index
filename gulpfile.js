@@ -1,6 +1,7 @@
 var gulp = require('gulp')
 var sass = require('gulp-sass')
 var babel = require('gulp-babel')
+var ghPages = require('gulp-gh-pages')
 
 gulp.task('script', function () {
   return gulp.src('src/index.js')
@@ -24,6 +25,11 @@ gulp.task('watch', function () {
     ['src/*', 'examples/*'],
     gulp.parallel('script', 'sass', 'examples')
   )
+})
+
+gulp.task('deploy', function () {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages())
 })
 
 gulp.task('build', gulp.parallel('script', 'sass', 'examples'))
