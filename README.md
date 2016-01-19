@@ -7,7 +7,7 @@
 
 done: http://amio.github.io/gh-index/
 
-![Screenshot](https://cloud.githubusercontent.com/assets/215282/12411107/76e3b25a-beb6-11e5-855b-49a9bbe48379.png)
+![Screenshot](https://cloud.githubusercontent.com/assets/215282/12411930/788bc2b2-bebd-11e5-9825-307e558486aa.png)
 
 ## Configuration
 
