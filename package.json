@@ -1,0 +1,25 @@
+{
+  "name": "gh-index",
+  "version": "1.0.0",
+  "description": "A directory index for gh-pages.",
+  "main": "index.es.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amio/gh-index.git"
+  },
+  "author": "Amio <amio.cn@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amio/gh-index/issues"
+  },
+  "homepage": "https://github.com/amio/gh-index#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-babel": "^6.1.1"
+  }
+}
