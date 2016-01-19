@@ -2,7 +2,7 @@
 $maxWidth: 500px
 
 $baseFontColor: #777
-$hardFontColor: #999
+$lightFontColor: #999
 
 $treeLinkColor: #CE8400
 $treeHoverBg: #FFFEE3
@@ -70,9 +70,11 @@ $listSpliter: #EFEFEF
 
     .footer
         font: 12px/50px 'Open Sans', sans-serif
-        color: $hardFontColor
+        color: $lightFontColor
         text-align: center
 
         a
-            color: $hardFontColor
-            text-decoration: underline
+            color: $lightFontColor
+
+            &:hover
+                color: $baseFontColor

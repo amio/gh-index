@@ -81,6 +81,7 @@ window.addEventListener('DOMContentLoaded', () => {
     init: function () {
       window.addEventListener('hashchange', index.hashRoute)
       insertStylesheet('http://amio.github.io/gh-index/index.css')
+      // insertStylesheet('index.css')
       insertStylesheetAsync(
         'https://octicons.github.com/components/octicons/octicons/octicons.css'
       )
