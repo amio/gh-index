@@ -45,29 +45,13 @@ window.addEventListener('DOMContentLoaded', () => {
     const repo = getRepoInfo()
     if (!repo) return window.alert('Repo config missing!')
 
-    const cachedData = window.sessionStorage.getItem(repo.owner + '/' + repo.name)
-    const treeData = cachedData && JSON.parse(cachedData)
-
-    // Only fetch new data every 360 sec, to avoid github api restriction.
-    if (treeData && (Date.now() - treeData.timestamp < 360000)) {
-      index.refresh(treeData)
-    } else {
-      const uri = `https://api.github.com/repos/${repo.owner}/${repo.name}` +
-        `/git/trees/${repo.branch}?recursive=1`
-      window.fetch(uri)
-        .then(resp => resp.json())
-        .then(result => {
-          // cache request data
-          // console.log(result.tree)
-          result.tree.timestamp = Date.now()
-          // window.sessionStorage.setItem(
-          //   repo.owner + '/' + repo.name,
-          //   JSON.stringify(result.tree)
-          // )
-
-          index.refresh(result.tree)
-        })
-    }
+    const uri = `https://api.github.com/repos/${repo.owner}/${repo.name}` +
+      `/git/trees/${repo.branch}?recursive=1`
+    window.fetch(uri, {cache: 'force-cache'})
+      .then(resp => resp.json())
+      .then(result => {
+        index.refresh(result.tree)
+      })
   }
 
   const index = {
