@@ -8,12 +8,6 @@
 window.addEventListener('DOMContentLoaded', function () {
   var wrapper = document.getElementById('gh-index');
 
-  var raf = function () {
-    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-      window.setTimeout(callback, 1000 / 60);
-    };
-  }();
-
   function insertStylesheet(url) {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -23,49 +17,20 @@ window.addEventListener('DOMContentLoaded', function () {
   }
 
   function insertStylesheetAsync(url) {
+    var raf = function () {
+      return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
+        window.setTimeout(callback, 1000 / 60);
+      };
+    }();
     raf(function () {
       insertStylesheet(url);
     });
   }
 
-  function getRepoInfo() {
-    var config = wrapper.getAttribute('repo') || wrapper.getAttribute('data-repo');
-    if (!config) return null;
-
-    var repoInfo = config.split('/');
-    return {
-      owner: repoInfo[0],
-      name: repoInfo[1],
-      branch: 'gh-pages'
-    };
-  }
-
-  function loadTrees() {
-    var repo = getRepoInfo();
-    if (!repo) return window.alert('Repo config missing!');
-
-    var cachedData = window.sessionStorage.getItem(repo.owner + '/' + repo.name);
-    var treeData = cachedData && JSON.parse(cachedData);
-
-    // Only fetch new data every 360 sec, to avoid github api restriction.
-    if (treeData && Date.now() - treeData.timestamp < 360000) {
-      index.refresh(treeData);
-    } else {
-      var uri = 'https://api.github.com/repos/' + repo.owner + '/' + repo.name + ('/git/trees/' + repo.branch + '?recursive=1');
-      window.fetch(uri).then(function (resp) {
-        return resp.json();
-      }).then(function (result) {
-        // cache request data
-        // console.log(result.tree)
-        result.tree.timestamp = Date.now();
-        // window.sessionStorage.setItem(
-        //   repo.owner + '/' + repo.name,
-        //   JSON.stringify(result.tree)
-        // )
-
-        index.refresh(result.tree);
-      });
-    }
+  function insertScript(url) {
+    var script = document.createElement('script');
+    script.src = url;
+    document.head.appendChild(script);
   }
 
   var index = {
@@ -78,11 +43,37 @@ window.addEventListener('DOMContentLoaded', function () {
      */
     init: function init() {
       window.addEventListener('hashchange', index.hashRoute);
+
       insertStylesheet('http://amio.github.io/gh-index/index.css');
       // insertStylesheet('index.css')
       insertStylesheetAsync('https://octicons.github.com/components/octicons/octicons/octicons.css');
+      window.fetch || insertScript('https://cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js');
 
-      loadTrees();
+      index.loadTrees();
+    },
+
+    getRepoInfo: function getRepoInfo() {
+      var config = wrapper.getAttribute('repo') || wrapper.getAttribute('data-repo');
+      if (!config) return null;
+
+      var repoInfo = config.split('/');
+      return {
+        owner: repoInfo[0],
+        name: repoInfo[1],
+        branch: 'gh-pages'
+      };
+    },
+
+    loadTrees: function loadTrees() {
+      var repo = index.getRepoInfo();
+      if (!repo) return window.alert('Repo config missing!');
+
+      var uri = 'https://api.github.com/repos/' + repo.owner + '/' + repo.name + ('/git/trees/' + repo.branch + '?recursive=1');
+      window.fetch(uri, { cache: 'force-cache' }).then(function (resp) {
+        return resp.json();
+      }).then(function (result) {
+        index.refresh(result.tree);
+      });
     },
 
     /**
@@ -160,7 +151,7 @@ window.addEventListener('DOMContentLoaded', function () {
       }
 
       // generate list html
-      var repo = getRepoInfo();
+      var repo = index.getRepoInfo();
       var home = 'http://' + repo.owner + '.github.io/' + repo.name + '/';
       var items = Object.keys(tree).map(function (key) {
         if (key === '/NODE/') return '';
