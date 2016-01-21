@@ -6,15 +6,6 @@
 window.addEventListener('DOMContentLoaded', () => {
   const wrapper = document.getElementById('gh-index')
 
-  const raf = (function () {
-    return window.requestAnimationFrame ||
-           window.webkitRequestAnimationFrame ||
-           window.mozRequestAnimationFrame ||
-           function (callback) {
-             window.setTimeout(callback, 1000 / 60)
-           }
-  })()
-
   function insertStylesheet (url) {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
@@ -24,34 +15,23 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function insertStylesheetAsync (url) {
+    const raf = (function () {
+      return window.requestAnimationFrame ||
+             window.webkitRequestAnimationFrame ||
+             window.mozRequestAnimationFrame ||
+             function (callback) {
+               window.setTimeout(callback, 1000 / 60)
+             }
+    })()
     raf(function () {
       insertStylesheet(url)
     })
   }
 
-  function getRepoInfo () {
-    const config = wrapper.getAttribute('repo') || wrapper.getAttribute('data-repo')
-    if (!config) return null
-
-    const repoInfo = config.split('/')
-    return {
-      owner: repoInfo[0],
-      name: repoInfo[1],
-      branch: 'gh-pages'
-    }
-  }
-
-  function loadTrees () {
-    const repo = getRepoInfo()
-    if (!repo) return window.alert('Repo config missing!')
-
-    const uri = `https://api.github.com/repos/${repo.owner}/${repo.name}` +
-      `/git/trees/${repo.branch}?recursive=1`
-    window.fetch(uri, {cache: 'force-cache'})
-      .then(resp => resp.json())
-      .then(result => {
-        index.refresh(result.tree)
-      })
+  function insertScript (url) {
+    const script = document.createElement('script')
+    script.src = url
+    document.head.appendChild(script)
   }
 
   const index = {
@@ -64,13 +44,38 @@ window.addEventListener('DOMContentLoaded', () => {
      */
     init: function () {
       window.addEventListener('hashchange', index.hashRoute)
+
       insertStylesheet('http://amio.github.io/gh-index/index.css')
       // insertStylesheet('index.css')
-      insertStylesheetAsync(
-        'https://octicons.github.com/components/octicons/octicons/octicons.css'
-      )
+      insertStylesheetAsync('https://octicons.github.com/components/octicons/octicons/octicons.css')
+      window.fetch || insertScript('https://cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js')
 
-      loadTrees()
+      index.loadTrees()
+    },
+
+    getRepoInfo: function () {
+      const config = wrapper.getAttribute('repo') || wrapper.getAttribute('data-repo')
+      if (!config) return null
+
+      const repoInfo = config.split('/')
+      return {
+        owner: repoInfo[0],
+        name: repoInfo[1],
+        branch: 'gh-pages'
+      }
+    },
+
+    loadTrees: function () {
+      const repo = index.getRepoInfo()
+      if (!repo) return window.alert('Repo config missing!')
+
+      const uri = `https://api.github.com/repos/${repo.owner}/${repo.name}` +
+        `/git/trees/${repo.branch}?recursive=1`
+      window.fetch(uri, {cache: 'force-cache'})
+        .then(resp => resp.json())
+        .then(result => {
+          index.refresh(result.tree)
+        })
     },
 
     /**
@@ -149,7 +154,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       // generate list html
-      const repo = getRepoInfo()
+      const repo = index.getRepoInfo()
       const home = 'http://' + repo.owner + '.github.io/' + repo.name + '/'
       const items = Object.keys(tree).map(key => {
         if (key === '/NODE/') return ''
