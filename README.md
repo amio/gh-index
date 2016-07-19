@@ -1,13 +1,13 @@
 # A directory index for gh-pages
 
-> DEPRECATION: Now we have a super handy RawGit: https://rawgit.com/
-
 ## Two steps how-to:
 
-1. Include script: http://amio.github.io/gh-index/index.js
+1. Include script: `<script src="http://amio.github.io/gh-index/index.js"></script>`
 2. Add a wrapper div: `<div id="gh-index" repo="mozilla/Fira"></div>`
 
-done: http://amio.github.io/gh-index/
+tada!
+
+Just like this example: http://amio.github.io/gh-index/
 
 ![Screenshot](https://cloud.githubusercontent.com/assets/215282/12411930/788bc2b2-bebd-11e5-9825-307e558486aa.png)
 
