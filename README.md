@@ -1,5 +1,7 @@
 # A directory index for gh-pages
 
+> DEPRECATION: Now we have a super handy RawGit: https://rawgit.com/
+
 ## Two steps how-to:
 
 1. Include script: http://amio.github.io/gh-index/index.js
