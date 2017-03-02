@@ -1,5 +1,7 @@
 # A directory index for gh-pages
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/amio/gh-index.svg)](https://greenkeeper.io/)
+
 ## Two steps how-to:
 
 1. Include script: `<script src="http://amio.github.io/gh-index/index.js"></script>`
